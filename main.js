@@ -39,8 +39,7 @@ function init() {
     var light = new THREE.DirectionalLight( 0xffffff, 1 );
     light.position.set( 20,20, 0 );
     scene.add( light );
-    // axes
-    scene.add( new THREE.AxesHelper( 20 ) );
+    
     // mesh
         const loader = new GLTFLoader();
         loader.load( '/HUMAN.glb', function ( gltf ) {
