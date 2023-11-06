@@ -1,50 +1,46 @@
-* {
-    box-sizing: border-box;
-  }
-  
- 
-  
-  .file-input {
-    display: inline-block;
-    text-align: left;
-    background: #fff;
-    padding: 16px;
-    width: 450px;
-    position: relative;
-    border-radius: 3px;
-  }
-  
-  .file-input > [type='file'] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    z-index: 10;
-    cursor: pointer;
-  }
-  
-  .file-input > .button {
-    display: inline-block;
-    cursor: pointer;
-    background: #eee;
-    padding: 8px 16px;
-    border-radius: 2px;
-    margin-right: 8px;
-  }
-  
-  .file-input:hover > .button {
-    background: dodgerblue;
-    color: white;
-  }
-  
-  .file-input > .label {
-    color: #333;
-    white-space: nowrap;
-    opacity: .3;
-  }
-  
-  .file-input.-chosen > .label {
-    opacity: 1;
-  }
+body {
+	margin: 0px;
+	overflow: hidden;
+}
+
+.container {
+	position: absolute;
+	left: 90%;
+	z-index: 15000;
+}
+
+.input {
+	width: 20%;
+	height: 50%;
+	z-index: 1;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.experience {
+	display: block;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+}
+img {
+	margin: 2em;
+	border-radius: 30px;
+}
+input {
+	background-color: transparent;
+}
+	#selection {
+				position: fixed;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				height: 100%;
+				width: 100%;
+				top: 0;
+				z-index: 999;
+			}
