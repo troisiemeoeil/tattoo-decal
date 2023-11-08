@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+
 // import studio from '@theatre/studio'
 // import core from '@theatre/core'
 
@@ -81,6 +83,7 @@ scene.add( Hemlight );
 
     const selection = document.getElementById( 'selection' );
     const controls = new OrbitControls( camera, selection );
+    controls.enableRotate = false
     controls.enablePan = true
     camera.updateProjectionMatrix()
     //
@@ -112,16 +115,19 @@ let mesh;
 
         window.addEventListener('keypress', (event)=> {
             console.log(event.key);
-            scene.traverse(function (mesh) {
+            let baseModel = scene.children[3]
 
-                if (mesh instanceof THREE.Mesh) {
-                    // console.log(mesh);
-                    mesh.rotation.z += 2.5
-                }
-            })
-            // if (event.key == "f") {
-            //     scene.rotation.y += 1
-            //   }
+            // scene.traverse(function (mesh) {
+
+            //     if (mesh instanceof THREE.Mesh) {
+
+            //         // console.log(mesh);
+            //         baseModel.rotation.z += 2.5
+            //     }
+            // })
+            if (event.key == "f") {
+                baseModel.rotation.y += 0.5
+              }
         })
 
         window.addEventListener( 'pointermove', onPointerMove );
@@ -155,12 +161,15 @@ input.addEventListener('change', ()=> {
 
 
 window.addEventListener('dblclick', (event)=> {
+let baseModel = scene.children[3]
+
     let aspectRatio = image.naturalWidth / image.naturalHeight
 
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 raycaster.setFromCamera( mouse, camera );
+
 var intersects = raycaster.intersectObject( mesh );
 console.log(intersects);
 
@@ -177,15 +186,16 @@ console.log(intersects[0]);
     console.log("pos", position);
 
 
-    var size = new THREE.Vector3( aspectRatio , 1, 1 );
+    var size = new THREE.Vector3( 0.4 , 0.4, 0.4 );
 
 	decalGeometry = new DecalGeometry( mesh, position, rotation, size );
     
-                console.log("decal", decalGeometry);
     var decal = new THREE.Mesh( decalGeometry, decalMaterial );
- 
-  scene.add( decal );
-    console.log("here decal", decal);
+    const group = new THREE.Group();
+    group.add(baseModel)
+    group.add(decal)
+  scene.add( group );
+    console.log("here decal", scene);
 }
 })
 

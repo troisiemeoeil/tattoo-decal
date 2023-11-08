@@ -80,7 +80,7 @@ function init() {
 
     const controls = new OrbitControls( camera, renderer.domElement );
     controls.enabled = true;
-    controls.enableRotate  = false
+    controls.enableRotate  = true
     controls.enablePan  = true
 
    
@@ -262,6 +262,7 @@ let baseModel = scene.children[5]
         removeDecals()
       }
 })
+
 
 
 
