@@ -2,18 +2,18 @@
 
 
 import * as THREE from 'three';
-
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import * as GeometryUtils from 'three/addons/utils/GeometryUtils.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+// import studio from '@theatre/studio'
+// import core from '@theatre/core'
 
 var mesh, renderer, scene, camera, controls;
 var mouse, raycaster, helper, decalMaterial, decalGeometry;
 let line, sprite, texture;
 
 let cameraOrtho, sceneOrtho;
-
+const experience = document.querySelector('.container')
 let offset = 0;
 
 const dpr = window.devicePixelRatio;
@@ -22,6 +22,8 @@ const textureSize = 256 * dpr;
 const vector = new THREE.Vector2();
 init();
 animate();
+
+// studio.initialize()
 
 function init() {
 
@@ -60,10 +62,14 @@ function init() {
 
     var light = new THREE.DirectionalLight( 0xffffff, 1 );
         light.position.set( 20,20, 0 );
-        light.position.set( 20, -20, 20 );
+        light.position.set( 20, -20, 0 );
 
         scene.add( light );
-        
+        const Amblight = new THREE.AmbientLight( 0x404040 ); // soft white light
+scene.add( Amblight );
+
+const Hemlight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+scene.add( Hemlight );
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -75,8 +81,8 @@ function init() {
 
     const selection = document.getElementById( 'selection' );
     const controls = new OrbitControls( camera, selection );
-    controls.enablePan = false
-
+    controls.enablePan = true
+    camera.updateProjectionMatrix()
     //
 let mesh;
     const loader = new GLTFLoader();
@@ -85,8 +91,10 @@ let mesh;
                 mesh = gltf.scene.children[ 0 ];
                 console.log(mesh);
                 scene.add( mesh );
-                mesh.scale.set(  8,8,8 );
-                mesh.position.set(0,-10,0)
+                // mesh.scale.set(  1,1,1 );
+                mesh.position.set(0,-1,0)
+                // mesh.rotation.set(-1,0,4.5)
+
         
             } );
 
@@ -102,6 +110,19 @@ let mesh;
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
 
+        window.addEventListener('keypress', (event)=> {
+            console.log(event.key);
+            scene.traverse(function (mesh) {
+
+                if (mesh instanceof THREE.Mesh) {
+                    // console.log(mesh);
+                    mesh.rotation.z += 2.5
+                }
+            })
+            // if (event.key == "f") {
+            //     scene.rotation.y += 1
+            //   }
+        })
 
         window.addEventListener( 'pointermove', onPointerMove );
 const image = document.querySelector("img")
@@ -151,9 +172,6 @@ console.log(intersects[0]);
     const pos = intersects[ 0 ].point.clone()
     const eye = pos.clone()
     const rotation = new THREE.Matrix4()
-    rotation.lookAt(eye, pos, THREE.Object3D.DEFAULT_UP)
-    const euler = new THREE.Euler()
-    euler.setFromRotationMatrix(rotation)
 
     var position = intersects[0].point
     console.log("pos", position);
@@ -161,11 +179,12 @@ console.log(intersects[0]);
 
     var size = new THREE.Vector3( aspectRatio , 1, 1 );
 
-	decalGeometry = new DecalGeometry( mesh, position, euler, size );
+	decalGeometry = new DecalGeometry( mesh, position, rotation, size );
     
                 console.log("decal", decalGeometry);
     var decal = new THREE.Mesh( decalGeometry, decalMaterial );
-    scene.add( decal );
+ 
+  scene.add( decal );
     console.log("here decal", decal);
 }
 })
@@ -223,7 +242,8 @@ function animate() {
 
     renderer.clearDepth();
     renderer.render( sceneOrtho, cameraOrtho );
-
+    camera.updateProjectionMatrix();
+    cameraOrtho.updateProjectionMatrix()
 }
 
 

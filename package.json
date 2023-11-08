@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "@theatre/core": "^0.7.0",
     "three": "^0.157.0"
   },
   "devDependencies": {
+    "@theatre/studio": "^0.7.0",
     "vite": "^4.5.0"
   }
 }
