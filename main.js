@@ -94,8 +94,8 @@ let mesh;
                 mesh = gltf.scene.children[ 0 ];
                 console.log(mesh);
                 scene.add( mesh );
-                // mesh.scale.set(  1,1,1 );
-                mesh.position.set(0,-1,0)
+                mesh.scale.set(  10,10,10 );
+                mesh.position.set(0,-10,0)
                 // mesh.rotation.set(-1,0,4.5)
 
         
@@ -112,21 +112,38 @@ let mesh;
             mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
-
+        let exist = false;
         window.addEventListener('keypress', (event)=> {
-            console.log(event.key);
-            let baseModel = scene.children[3]
+              scene.traverse(function (mesh) {
+                if (mesh.type ==="Group") {
+                  exist = true
+                }
+            })
+            let baseModel = scene.children[3]                                               
+            if (event.key == "d" && exist === true) {
+    
+                baseModel.rotation.y += 0.05
+              }
 
-            // scene.traverse(function (mesh) {
+              if (event.key == "q" && exist === true) {
+                baseModel.rotation.y -= 0.05
+              }
 
-            //     if (mesh instanceof THREE.Mesh) {
+              
+              if (event.key == "z" && exist === true) {
+                baseModel.rotation.x += 0.05
+              }
 
-            //         // console.log(mesh);
-            //         baseModel.rotation.z += 2.5
-            //     }
-            // })
-            if (event.key == "f") {
-                baseModel.rotation.y += 0.5
+              if (event.key == "s" && exist === true) {
+                baseModel.rotation.x -= 0.05
+              }
+
+              if (event.key == "e" && exist === true) {
+                baseModel.rotation.z += 0.05
+              }
+
+              if (event.key == "a" && exist === true) {
+                baseModel.rotation.z -= 0.05
               }
         })
 
@@ -186,7 +203,7 @@ console.log(intersects[0]);
     console.log("pos", position);
 
 
-    var size = new THREE.Vector3( 0.4 , 0.4, 0.4 );
+    var size = new THREE.Vector3( aspectRatio, 1, 1);
 
 	decalGeometry = new DecalGeometry( mesh, position, rotation, size );
     
