@@ -1,4 +1,13 @@
 {
+  "name": "tattoo-configurator",
+  "private": false,
+  "version": "0.0.5",
+  "type": "module",
+    "scripts": {
+      "build": "vite build",
+      "preview": "vite preview"
+    },
+  
   "dependencies": {
     "@theatre/core": "^0.7.0",
     "@thednp/color-picker": "^2.0.0-alpha10",

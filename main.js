@@ -91,7 +91,7 @@ scene.add( Hemlight );
     //
 var mesh;
     const loader = new GLTFLoader();
-            loader.load( '/HUMAN.glb', function ( gltf ) {
+            loader.load( 'https://rfkdwkpnnalilegqqggx.supabase.co/storage/v1/object/public/troisiemeoeil-bucket/files/HUMAN.glb', function ( gltf ) {
         
                 mesh = gltf.scene.children[ 0 ];
                 console.log(mesh);
