@@ -1,21 +1,102 @@
-body {
-	margin: 0px;
+
+html {
+	box-sizing: content-box;
+	width: 100%;
+    height:100%;
+    justify-content: center;
+    align-items: center;
+	margin: 0;
+	padding: 0;
 	overflow: hidden;
-}
+  }
+
+  body {
+	margin: 0;
+  }
+
+  #selection {
+	touch-action: auto !important;
+	height: 100%;
+	width: 50%;	
+	}
+
+.drop-container {
+	position: relative;
+	display: flex;
+	gap: 10px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: auto;
+	padding: 10px;
+	margin: 5%;
+
+	border-radius: 10px;
+	border: 2px dashed #555;
+	color: #444;
+	cursor: pointer;
+	transition: background .2s ease-in-out, border .2s ease-in-out;
+  }
+  
+  .drop-container:hover,
+  .drop-container.drag-active {
+	background: #eee;
+	border-color: #111;
+  }
+  
+  .drop-container:hover .drop-title,
+  .drop-container.drag-active .drop-title {
+	color: #222;
+  }
+  
+  .drop-title {
+	color: #444;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	transition: color .2s ease-in-out;
+  }
+  
+  input[type=file] {
+	width: 350px;
+	max-width: 100%;
+	color: #444;
+	padding: 5px;
+	background: #fff;
+	border-radius: 10px;
+	border: 1px solid #555;
+  }
+  
+  input[type=file]::file-selector-button {
+	margin-right: 20px;
+	border: none;
+	background: #084cdf;
+	padding: 10px 20px;
+	border-radius: 10px;
+	color: #fff;
+	cursor: pointer;
+	transition: background .2s ease-in-out;
+  }
+  
+  input[type=file]::file-selector-button:hover {
+	background: #0d45a5;
+  }
 
 .container {
-	/* display: block; */
-	/* width: 100vw;
-	height: 100vh; */
 	position: absolute;
 	top: 25%;
-	left: 90%;
-	z-index: 15000;
+	left: 85vw;
+	z-index: 99999;
+}
+
+
+.btnRotate, .btnShoot {
+	z-index: 10;
 }
 
 .input {
-	width: 20%;
-	height: 50%;
+	width: 25%;
+	height: 95%;
 	z-index: 1;
   color: white;
   text-align: center;
@@ -23,28 +104,35 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: white;
+    gap: 61px;
+    margin: 2em;
+    border-radius: 15px;
 }
-.experience {
-	display: block;
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-}
+
 img {
-	margin: 2em;
+	height: 20vh;
+	width: 20vh;
+	object-fit: cover;
+	margin: 1em;
 	border-radius: 30px;
 }
 input {
 	background-color: transparent;
 }
-	#selection {
-				position: fixed;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				height: 100%;
-				width: 100%;
-				top: 0;
-				z-index: 999;
-			}
+
+
+			@media only screen and (max-width: 1400px) {
+				.container {
+					position: absolute;
+					top: 25%;
+					left: 85vw;
+					z-index: 999;
+				}
+				input[type=file] {
+					width: 20em;
+				  }
+			  }

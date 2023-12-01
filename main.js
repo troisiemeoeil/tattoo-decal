@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+import gsap from 'gsap';
 
 // import studio from '@theatre/studio'
 // import core from '@theatre/core'
@@ -15,7 +16,10 @@ var mouse, raycaster, helper, decalMaterial, decalGeometry;
 let line, sprite, texture;
 
 let cameraOrtho, sceneOrtho;
-const experience = document.querySelector('.container')
+  let container = document.getElementById("selection")
+  let colorPicker = document.querySelector(".colorPicker")
+
+
 let offset = 0;
 
 const dpr = window.devicePixelRatio;
@@ -25,9 +29,8 @@ const vector = new THREE.Vector2();
 init();
 animate();
 
-// studio.initialize()
-
 function init() {
+  let originalPos;
 
     //
 
@@ -35,12 +38,13 @@ function init() {
     const height = window.innerHeight;
 
     camera = new THREE.PerspectiveCamera( 70, width / height, 1, 1000 );
-    camera.position.z = 20;
+    camera.position.set (0,0,20);
+    camera.lookAt(new THREE.Vector3(0,0,0));
 
     cameraOrtho = new THREE.OrthographicCamera( - width / 2, width / 2, height / 2, - height / 2, 1, 10 );
     cameraOrtho.position.z = 10;
-
-
+    originalPos = camera.position
+  console.log(camera.position);
     scene = new THREE.Scene();
     sceneOrtho = new THREE.Scene();
 
@@ -64,7 +68,7 @@ function init() {
 
     var light = new THREE.DirectionalLight( 0xffffff, 1 );
         light.position.set( 20,20, 0 );
-        light.position.set( 20, -20, 0 );
+        // light.position.set( 20, -20, 0 );
 
         scene.add( light );
         const Amblight = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -72,12 +76,11 @@ scene.add( Amblight );
 
 const Hemlight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
 scene.add( Hemlight );
-
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.autoClear = false;
-    document.body.appendChild( renderer.domElement );
+    container.appendChild(renderer.domElement);
 
     //
 
@@ -85,22 +88,36 @@ scene.add( Hemlight );
     const controls = new OrbitControls( camera, selection );
     controls.enableRotate = false
     controls.enablePan = true
-    camera.updateProjectionMatrix()
     //
-let mesh;
+var mesh;
     const loader = new GLTFLoader();
             loader.load( '/HUMAN.glb', function ( gltf ) {
         
                 mesh = gltf.scene.children[ 0 ];
                 console.log(mesh);
                 scene.add( mesh );
-                mesh.scale.set(  10,10,10 );
+                mesh.scale.set(10,10,10)
                 mesh.position.set(0,-10,0)
-                // mesh.rotation.set(-1,0,4.5)
+                colorPicker.addEventListener('input', ()=> {
+                  const red = parseInt(colorPicker.value.substring(1, 3), 16);
+                  const green = parseInt(colorPicker.value.substring(3, 5), 16);
+                  const blue = parseInt(colorPicker.value.substring(5, 7), 16);
+
+                  const rgb = (red, green, blue); // [229, 229, 229]
+                 
+                  const color4 = new THREE.Color(`rgb(${red},${green},${blue})`);
+                     mesh.material.color.set(color4);
+                    console.log( color4);
+                   
+                })
+
+           
 
         
-            } );
+              } );
 
+         
+            
     window.addEventListener( 'resize', onWindowResize );
 
     mouse = new THREE.Vector2();
@@ -113,6 +130,32 @@ let mesh;
             mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
         let exist = false;
+        let rotation = false
+        const btnRotate = document.querySelector(".btnRotate")
+        const btnShoot = document.querySelector(".btnShoot")
+        btnRotate.addEventListener('click', (e)=> {
+          e.preventDefault()
+            console.log('clicked');
+            rotation = true
+            controls.enableRotate =  true
+        })
+        btnShoot.addEventListener('click', (e)=> {
+          e.preventDefault()
+
+          console.log('clicked');
+          rotation = false
+          controls.enableRotate =  false
+          gsap.timeline()
+              .to(camera.position, {
+                x: 0,
+                y:0,
+                z:20, 
+                duration: 1,
+                ease: "power1.out",
+              }, 0)
+    camera.updateProjectionMatrix()
+
+      })
         window.addEventListener('keypress', (event)=> {
               scene.traverse(function (mesh) {
                 if (mesh.type ==="Group") {
@@ -121,17 +164,33 @@ let mesh;
             })
             let baseModel = scene.children[3]                                               
             if (event.key == "d" && exist === true) {
-    
-                baseModel.rotation.y += 0.05
+            
+              gsap.timeline()
+              .to(baseModel.rotation, {
+                y:"+=0.3", 
+                duration: 1,
+                ease: "power1.out",
+              }, 0)
               }
 
               if (event.key == "q" && exist === true) {
-                baseModel.rotation.y -= 0.05
+                gsap.timeline()
+                .to(baseModel.rotation, {
+                  y:"-=0.3", 
+                  duration: 1,
+                  ease: "power1.out",
+                }, 0)
               }
-
+// 7 19
               
-              if (event.key == "z" && exist === true) {
-                baseModel.rotation.x += 0.05
+              if (event.key == "z" ) {
+                gsap.timeline()
+                .to(baseModel.rotation, {
+                  y:"1.7",
+                  x: "0.9",
+                  duration: 1,
+                  ease: "power1.out",
+                }, 0)
               }
 
               if (event.key == "s" && exist === true) {
@@ -178,6 +237,7 @@ input.addEventListener('change', ()=> {
 
 
 window.addEventListener('dblclick', (event)=> {
+  if (rotation === true) return
 let baseModel = scene.children[3]
 
     let aspectRatio = image.naturalWidth / image.naturalHeight
